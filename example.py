@@ -32,8 +32,7 @@ import torchvision.transforms as transforms
 import os
 import argparse
 
-from models.s4.s4 import S4
-from models.s4.s4d import S4D
+from transformer_LAS import Transformer
 from tqdm.auto import tqdm
 
 # Dropout broke in PyTorch 1.11
@@ -174,7 +173,7 @@ class S4Model(nn.Module):
         self.dropouts = nn.ModuleList()
         for _ in range(n_layers):
             self.s4_layers.append(
-                S4D(d_model, dropout=dropout, transposed=True, lr=min(0.001, args.lr))
+                Transformer(d_model, dropout=0., custom_encoder=None, custom_decoder=None)
             )
             self.norms.append(nn.LayerNorm(d_model))
             self.dropouts.append(dropout_fn(dropout))
